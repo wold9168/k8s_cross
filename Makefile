@@ -1,18 +1,27 @@
 # Makefile for k8s-cross-cluster project
 
+PLUGIN_NAME=k8s_cross
+
 all: build
 
 # Clone CoreDNS repository to current directory
 clone-coredns:
-	git submodule update --init --remote; \
+	git submodule update --init --remote;
 
-register-plugin:
+link-plugin:
+	cd coredns/plugin &&\
+	if [ ! -e ./"${PLUGIN_NAME}" ]; then \
+		ln -s ../../ ./"${PLUGIN_NAME}"; \
+	fi
+
+
+register-plugin: link-plugin
 	cd coredns &&\
-	grep -qxF 'k8s-cross-cluster:k8s-cross-cluster' plugin.cfg || echo 'k8s-cross-cluster:k8s-cross-cluster' >> plugin.cfg &&\
+	grep -qxF ${PLUGIN_NAME}:${PLUGIN_NAME} plugin.cfg || echo ${PLUGIN_NAME}:${PLUGIN_NAME} >> plugin.cfg &&\
 	go generate
 
 build: clone-coredns register-plugin
 	cd coredns &&\
 	make
 
-.PHONY: clone-coredns register-plugin build
+.PHONY: clone-coredns link-plugin register-plugin build
