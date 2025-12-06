@@ -6,7 +6,6 @@ import (
 	"github.com/coredns/caddy"
 	"github.com/coredns/coredns/core/dnsserver"
 	"github.com/coredns/coredns/plugin"
-	"github.com/coredns/coredns/plugin/k8s_cross/headscale"
 )
 
 // init registers this plugin with CoreDNS.
@@ -66,11 +65,11 @@ func parseConfig(c *caddy.Controller) (*K8sCross, error) {
 				}
 				url := args[0]
 				apiKey := args[1]
-				
+
 				// Create Headscale client
 				client := NewClient(url, apiKey)
 				k8sCross.HeadscaleClient = client
-				
+
 				// Test the connection
 				// Note: In a production implementation, you might want to defer this check
 				// until the plugin is actually used to avoid startup delays

@@ -8,15 +8,13 @@ import (
 	"github.com/coredns/coredns/plugin/pkg/dnstest"
 	"github.com/coredns/coredns/plugin/test"
 	"github.com/miekg/dns"
-
-	"github.com/wold9168/k8s_cross/headscale"
 )
 
 // TestK8sCross tests the k8s_cross plugin's basic functionality
 func TestK8sCross(t *testing.T) {
 	// Create a mock client using our mock implementation
 	mockClient := &MockHeadscaleClient{
-		Nodes: []headscale.Node{
+		Nodes: []Node{
 			{
 				ID:          "1",
 				Name:        "my-service-1",
@@ -114,10 +112,10 @@ func TestK8sCross_IsClustersetQuery(t *testing.T) {
 
 // MockHeadscaleClient is a mock implementation of the Headscale client for testing
 type MockHeadscaleClient struct {
-	Nodes []headscale.Node
+	Nodes []Node
 }
 
-func (m *MockHeadscaleClient) GetNode(ctx context.Context, nodeId string) (*headscale.Node, error) {
+func (m *MockHeadscaleClient) GetNode(ctx context.Context, nodeId string) (*Node, error) {
 	// Mock implementation
 	for _, node := range m.Nodes {
 		if node.ID == nodeId {
@@ -128,22 +126,22 @@ func (m *MockHeadscaleClient) GetNode(ctx context.Context, nodeId string) (*head
 	return nil, fmt.Errorf("node not found")
 }
 
-func (m *MockHeadscaleClient) ListNodes(ctx context.Context, userFilter string) ([]headscale.Node, error) {
+func (m *MockHeadscaleClient) ListNodes(ctx context.Context, userFilter string) ([]Node, error) {
 	return m.Nodes, nil
 }
 
-func (m *MockHeadscaleClient) Health(ctx context.Context) (*headscale.HealthResponse, error) {
-	return &headscale.HealthResponse{DatabaseConnectivity: true}, nil
+func (m *MockHeadscaleClient) Health(ctx context.Context) (*HealthResponse, error) {
+	return &HealthResponse{DatabaseConnectivity: true}, nil
 }
 
-func (m *MockHeadscaleClient) CreateUser(ctx context.Context, req *headscale.CreateUserRequest) (*headscale.User, error) {
+func (m *MockHeadscaleClient) CreateUser(ctx context.Context, req *CreateUserRequest) (*User, error) {
 	return nil, nil
 }
 
 // TestK8sCross_FindServiceNodes tests the service node discovery functionality
 func TestK8sCross_FindServiceNodes(t *testing.T) {
 	// Create mock nodes
-	mockNodes := []headscale.Node{
+	mockNodes := []Node{
 		{
 			ID:          "1",
 			Name:        "my-service-node1",
@@ -181,7 +179,7 @@ func TestK8sCross_FindServiceNodes(t *testing.T) {
 
 // TestK8sCross_BuildRecords tests the DNS record building functionality
 func TestK8sCross_BuildRecords(t *testing.T) {
-	nodes := []*headscale.Node{
+	nodes := []*Node{
 		{
 			ID:          "1",
 			Name:        "my-service-1",

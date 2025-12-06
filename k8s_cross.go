@@ -22,7 +22,6 @@ import (
 	"github.com/coredns/coredns/request"
 
 	"github.com/miekg/dns"
-	"github.com/prometheus/client_golang/prometheus"
 )
 
 // Define a logger with the plugin name. This allows us to use log.Info and
