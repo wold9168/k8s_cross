@@ -7,6 +7,7 @@ require (
 	github.com/coredns/coredns v1.13.1
 	github.com/miekg/dns v1.1.68
 	github.com/prometheus/client_golang v1.23.0
+	github.com/wold9168/k8s_cross/headscale v0.0.0-00010101000000-000000000000
 )
 
 require (
@@ -37,3 +38,5 @@ require (
 	google.golang.org/grpc v1.75.1 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
 )
+
+replace github.com/wold9168/k8s_cross/headscale => ./headscale
